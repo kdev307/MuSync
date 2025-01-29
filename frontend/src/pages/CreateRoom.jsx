@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Button,
     Grid,
@@ -10,8 +10,7 @@ import {
     Radio,
     RadioGroup,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function CreateRoom() {
     const defaultVotes = 2;
@@ -19,6 +18,8 @@ function CreateRoom() {
         guestCanPause: true,
         votesToSkip: defaultVotes,
     });
+
+    const navigate = useNavigate();
 
     const handeCreateRoom = () => {
         const requestOptions = {
@@ -31,7 +32,9 @@ function CreateRoom() {
         };
         fetch("/api/create-room", requestOptions)
             .then((response) => response.json())
-            .then((data) => console.log(data));
+            .then((data) => {
+                navigate(`/room/${data.code}`);
+            });
     };
 
     return (
