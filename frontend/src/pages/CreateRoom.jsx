@@ -30,9 +30,10 @@ function CreateRoom() {
                 guest_can_pause: formData.guestCanPause,
             }),
         };
-        fetch("http://localhost:8000/api/create-room", requestOptions)
+        fetch("/api/create-room", requestOptions)
             .then((response) => response.json())
             .then((data) => {
+                console.log("Room created:", data);
                 navigate(`/room/${data.code}`);
             });
     };
