@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 
-function EditRoom({ roomDetails, toggleSettings }) {
+function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
     const { roomCode } = useParams();
 
     const [formData, setFormData] = useState({
@@ -43,6 +43,7 @@ function EditRoom({ roomDetails, toggleSettings }) {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Room updated:", data);
+                updateRoomData();
                 toggleSettings(false);
             });
     };

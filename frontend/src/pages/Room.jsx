@@ -30,6 +30,10 @@ function Room() {
             });
     };
 
+    useEffect(() => {
+        getRoomDetails();
+    }, [roomCode]);
+
     const leaveRoom = () => {
         const requestOptions = {
             method: "POST",
@@ -44,16 +48,12 @@ function Room() {
         setRoomDetails({ ...roomDetails, showSettings: value });
     };
 
-    useEffect(() => {
-        getRoomDetails();
-    }, [roomCode, navigate]);
-
     if (roomDetails.showSettings) {
         return (
             <EditRoom
                 roomDetails={roomDetails}
-                // roomCode={roomCode}
                 toggleSettings={toggleSettings}
+                updateRoomData={getRoomDetails}
             />
         );
     }
@@ -109,40 +109,8 @@ function Room() {
                     Leave Room
                 </Button>
             </Grid>
-            {/* {roomDetails.showSettings && (
-                <RoomSettings
-                    roomCode={roomCode}
-                    isUpdate={true}
-                    getRoomDetails={getRoomDetails}
-                />
-            )} */}
         </Grid>
     );
 }
-
-// function Settings({ roomDetails, roomCode, toggleSettings }) {
-//     const { votesToSkip, guestCanPause } = roomDetails;
-//     return (
-//         <Grid container spacing={1}>
-//             <Grid item xs={12} align="center">
-//                 <CreateRoom
-//                     update={true}
-//                     votesToSkip={votesToSkip}
-//                     guestCanPause={guestCanPause}
-//                     roomCode={roomCode}
-//                 />
-//             </Grid>
-//             <Grid item xs={12} align="center">
-//                 <Button
-//                     variant="contained"
-//                     color="secondary"
-//                     onClick={() => toggleSettings(false)}
-//                 >
-//                     Close
-//                 </Button>
-//             </Grid>
-//         </Grid>
-//     );
-// }
 
 export default Room;
