@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Typography, Button } from "@material-ui/core";
-import CreateRoom from "./CreateRoom";
+// import RoomSettings from "../components/RoomSettings";
+// import CreateRoom from "./CreateRoom";
+import EditRoom from "./EditRoom";
 
 function Room() {
     const { roomCode } = useParams();
@@ -44,13 +46,13 @@ function Room() {
 
     useEffect(() => {
         getRoomDetails();
-    }, [roomCode]);
+    }, [roomCode, navigate]);
 
     if (roomDetails.showSettings) {
         return (
-            <Settings
+            <EditRoom
                 roomDetails={roomDetails}
-                roomCode={roomCode}
+                // roomCode={roomCode}
                 toggleSettings={toggleSettings}
             />
         );
@@ -107,33 +109,40 @@ function Room() {
                     Leave Room
                 </Button>
             </Grid>
+            {/* {roomDetails.showSettings && (
+                <RoomSettings
+                    roomCode={roomCode}
+                    isUpdate={true}
+                    getRoomDetails={getRoomDetails}
+                />
+            )} */}
         </Grid>
     );
 }
 
-function Settings({ roomDetails, roomCode, toggleSettings }) {
-    const { votesToSkip, guestCanPause } = roomDetails;
-    return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
-                <CreateRoom
-                    update={true}
-                    votesToSkip={votesToSkip}
-                    guestCanPause={guestCanPause}
-                    roomCode={roomCode}
-                />
-            </Grid>
-            <Grid item xs={12} align="center">
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => toggleSettings(false)}
-                >
-                    Close
-                </Button>
-            </Grid>
-        </Grid>
-    );
-}
+// function Settings({ roomDetails, roomCode, toggleSettings }) {
+//     const { votesToSkip, guestCanPause } = roomDetails;
+//     return (
+//         <Grid container spacing={1}>
+//             <Grid item xs={12} align="center">
+//                 <CreateRoom
+//                     update={true}
+//                     votesToSkip={votesToSkip}
+//                     guestCanPause={guestCanPause}
+//                     roomCode={roomCode}
+//                 />
+//             </Grid>
+//             <Grid item xs={12} align="center">
+//                 <Button
+//                     variant="contained"
+//                     color="secondary"
+//                     onClick={() => toggleSettings(false)}
+//                 >
+//                     Close
+//                 </Button>
+//             </Grid>
+//         </Grid>
+//     );
+// }
 
 export default Room;

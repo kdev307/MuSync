@@ -1,0 +1,252 @@
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
+
+function RoomSettings({ roomCode, isUpdate, getRoomDetails }) {
+  const [roomData, setRoomData] = useState({
+    votesToSkip: 2,
+    guestCanPause: true,
+    errorMessage: "",
+    successMessage: "",
+  });
+
+  const navigate = useNavigate(); // Use the useNavigate hook for navigation
+
+  // Fetch room details if it's an update
+  useEffect(() => {
+    if (isUpdate && roomCode) {
+      fetch(`/api/get-room?code=${roomCode}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setRoomData({
+            votesToSkip: data.votes_to_skip,
+            guestCanPause: data.guest_can_pause,
+            errorMessage: "",
+            successMessage: "",
+          });
+        })
+        .catch(() => {
+          setRoomData({
+            ...roomData,
+            errorMessage: "Failed to load room details.",
+          });
+        });
+    }
+  }, [isUpdate, roomCode]);
+
+  // Handle form submission for both create and update
+  const handleRoomSubmit = () => {
+    const requestOptions = {
+      method: isUpdate ? "PATCH" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        votes_to_skip: roomData.votesToSkip,
+        guest_can_pause: roomData.guestCanPause,
+        code: roomCode, // Only required for update
+      }),
+    };
+
+    fetch(isUpdate ? "/api/update-room" : "/api/create-room", requestOptions)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setRoomData({
+            ...roomData,
+            successMessage: isUpdate
+              ? "Room updated successfully!"
+              : "Room created successfully!",
+            errorMessage: "",
+          });
+          getRoomDetails(); // Refresh the room details after success
+        } else {
+          setRoomData({
+            ...roomData,
+            errorMessage: isUpdate
+              ? "Error updating room..."
+              : "Error creating room...",
+          });
+        }
+      })
+      .catch(() => {
+        setRoomData({
+          ...roomData,
+          errorMessage: "Something went wrong, please try again.",
+        });
+      });
+  };
+
+  // Handle Back or Close button logic
+  const handleBackButton = () => {
+    if (isUpdate) {
+      navigate(`/room/${roomCode}`); // Close goes back to the room page
+    } else {
+      navigate("/"); // Back goes to the homepage for create room
+    }
+  };
+
+  return (
+    <Grid container spacing={1}>
+      <Grid item xs={12} align="center">
+        <Typography component="h4" variant="h4">
+          {isUpdate ? "Update Room" : "Create Room"}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} align="center">
+        {/* Display success or error messages */}
+        {roomData.errorMessage && (
+          <FormHelperText error>{roomData.errorMessage}</FormHelperText>
+        )}
+        {roomData.successMessage && (
+          <FormHelperText>{roomData.successMessage}</FormHelperText>
+        )}
+      </Grid>
+
+      {/* Guest control of playback state */}
+      <Grid item xs={12} align="center">
+        <FormControl component="fieldset">
+          <FormHelperText>
+            <div align="center">Guest Control of Playback State</div>
+          </FormHelperText>
+          <RadioGroup
+            row
+            value={roomData.guestCanPause.toString()}
+            onChange={(e) =>
+              setRoomData({
+                ...roomData,
+                guestCanPause: e.target.value === "true",
+              })
+            }
+          >
+            <FormControlLabel
+              value="true"
+              control={<Radio color="primary" />}
+              label="Play/Pause"
+              labelPlacement="bottom"
+            />
+            <FormControlLabel
+              value="false"
+              control={<Radio color="secondary" />}
+              label="No Control"
+              labelPlacement="bottom"
+            />
+          </RadioGroup>
+        </FormControl>
+      </Grid>
+
+      {/* Votes to skip */}
+      <Grid item xs={12} align="center">
+        <FormControl>
+          <TextField
+            required
+            type="number"
+            value={roomData.votesToSkip}
+            inputProps={{
+              min: 1,
+              style: { textAlign: "center" },
+            }}
+            onChange={(e) =>
+              setRoomData({
+                ...roomData,
+                votesToSkip: e.target.value,
+              })
+            }
+          />
+          <FormHelperText>
+            <div align="center">Votes required to skip songs</div>
+          </FormHelperText>
+        </FormControl>
+      </Grid>
+
+      {/* Submit Button */}
+      <Grid item xs={12} align="center">
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleRoomSubmit}
+        >
+          {isUpdate ? "Update Room" : "Create A Room"}
+        </Button>
+      </Grid>
+
+      {/* Back or Close Button */}
+      <Grid item xs={12} align="center">
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={handleBackButton}
+        >
+          {isUpdate ? "Close" : "Go Back"}
+        </Button>
+      </Grid>
+    </Grid>
+  );
+}
+
+export default RoomSettings;
+
+
+import React from "react";
+import { Grid, Typography } from "@material-ui/core";
+import RoomSettings from "./RoomSettings";
+import { useNavigate } from "react-router-dom";
+
+export default function CreateRoomPage() {
+  const navigate = useNavigate();
+
+  const handleRoomCreated = () => {
+    navigate("/room/createdRoomCode"); // Redirect after creating a room
+  };
+
+  return (
+    <Grid container spacing={1}>
+      <Grid item xs={12} align="center">
+        <Typography variant="h4">Create a Room</Typography>
+      </Grid>
+
+      <RoomSettings
+        isUpdate={false}
+        getRoomDetails={handleRoomCreated}
+      />
+    </Grid>
+  );
+}
+
+
+import React from "react";
+import { useParams } from "react-router-dom";
+import { Grid, Typography } from "@material-ui/core";
+import RoomSettings from "./RoomSettings";
+import { useNavigate } from "react-router-dom";
+
+export default function UpdateRoomPage() {
+  const { roomCode } = useParams();
+  const navigate = useNavigate();
+
+  const handleRoomUpdated = () => {
+    navigate(`/room/${roomCode}`); // Redirect to the room page after updating
+  };
+
+  return (
+    <Grid container spacing={1}>
+      <Grid item xs={12} align="center">
+        <Typography variant="h4">Update Room</Typography>
+      </Grid>
+
+      <RoomSettings
+        isUpdate={true}
+        roomCode={roomCode}
+        getRoomDetails={handleRoomUpdated}
+      />
+    </Grid>
+  );
+}
