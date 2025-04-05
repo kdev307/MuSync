@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Grid, Typography, Button } from "@material-ui/core";
+import { Grid, Typography, Button } from "@mui/material";
 // import RoomSettings from "../components/RoomSettings";
 // import CreateRoom from "./CreateRoom";
 import EditRoom from "./EditRoom";
@@ -22,11 +22,12 @@ function Room() {
                 return response.json();
             })
             .then((data) => {
-                setRoomDetails({
+                setRoomDetails((prevDetails) => ({
+                    ...prevDetails,
                     votesToSkip: data.votes_to_skip,
                     guestCanPause: data.guest_can_pause,
                     isHost: data.is_host,
-                });
+                }));
             });
     };
 

@@ -9,7 +9,7 @@ import {
     TextField,
     Radio,
     RadioGroup,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 function CreateRoom() {

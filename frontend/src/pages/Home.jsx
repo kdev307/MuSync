@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
+import { Grid, Button, ButtonGroup, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
 function Home() {

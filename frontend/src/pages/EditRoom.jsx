@@ -9,7 +9,9 @@ import {
     TextField,
     Radio,
     RadioGroup,
-} from "@material-ui/core";
+    Collapse,
+    Alert,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 
 function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
@@ -19,6 +21,10 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
         guestCanPause: roomDetails?.guestCanPause || false,
         votesToSkip: roomDetails?.votesToSkip || 2,
     });
+
+    const [collapseOpen, setCollapseOpen] = useState(false); // Controls Collapse visibility
+    const [alertMessage, setAlertMessage] = useState(""); // Message to show on success/error
+    const [alertSeverity, setAlertSeverity] = useState("success"); // Success or error message
 
     useEffect(() => {
         if (roomDetails) {
@@ -39,12 +45,27 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
                 code: roomCode,
             }),
         };
+
         fetch("/api/update-room", requestOptions)
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Failed to update room settings.");
+                }
+            })
             .then((data) => {
-                console.log("Room updated:", data);
-                updateRoomData();
-                toggleSettings(false);
+                setAlertMessage("Room settings updated successfully!");
+                setAlertSeverity("success"); // Success alert
+                setCollapseOpen(true); // Show message
+                updateRoomData(); // Update parent component
+            })
+            .catch((error) => {
+                setAlertMessage(
+                    error.message || "Failed to update room settings."
+                );
+                setAlertSeverity("error"); // Error alert
+                setCollapseOpen(true); // Show message
             });
     };
 
@@ -52,9 +73,22 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
         <Grid container spacing={1}>
             <Grid item xs={12} align="center">
                 <Typography component="h4" variant="h4">
-                    Edit Room : ${roomCode}
+                    Edit Room : {roomCode}
                 </Typography>
             </Grid>
+
+            {/* Success/Error Message Collapse */}
+            <Grid item xs={12} align="center">
+                <Collapse in={collapseOpen}>
+                    <Alert
+                        severity={alertSeverity}
+                        onClose={() => setCollapseOpen(false)}
+                    >
+                        {alertMessage}
+                    </Alert>
+                </Collapse>
+            </Grid>
+
             <Grid item xs={12} align="center">
                 <FormControl component="fieldset">
                     <FormHelperText>
@@ -86,6 +120,7 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
                         />
                     </RadioGroup>
                 </FormControl>
+
                 <Grid item xs={12} align="center">
                     <FormControl>
                         <TextField
