@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Typography, Button } from "@mui/material";
-// import RoomSettings from "../components/RoomSettings";
-// import CreateRoom from "./CreateRoom";
 import EditRoom from "./EditRoom";
 
 function Room() {
@@ -13,7 +11,31 @@ function Room() {
         guestCanPause: false,
         isHost: false,
         showSettings: false,
+        spotifyAuthenticated: false,
     });
+
+    const authenticateSpotify = () => {
+        fetch(`/spotify/is-authenticated`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Raw response from getRoomDetails:", data);
+                setRoomDetails((prevDetails) => ({
+                    ...prevDetails,
+                    spotifyAuthenticated: data.status,
+                }));
+                if (!data.status) {
+                    fetch("/spotify/get-auth-url")
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.replace(data.url);
+                        });
+                }
+                //  else {
+                //     // window.location.href = `http://localhost:3000/room/${roomCode}/`;
+                //     getRoomDetails();
+                // }
+            });
+    };
 
     const getRoomDetails = () => {
         fetch(`/api/get-room?code=${roomCode}`)
@@ -28,11 +50,15 @@ function Room() {
                     guestCanPause: data.guest_can_pause,
                     isHost: data.is_host,
                 }));
+                if (data.is_host) {
+                    authenticateSpotify();
+                }
             });
     };
 
     useEffect(() => {
         getRoomDetails();
+        // authenticateSpotify();
     }, [roomCode]);
 
     const leaveRoom = () => {
