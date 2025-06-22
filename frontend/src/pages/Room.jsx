@@ -12,6 +12,7 @@ function Room() {
         isHost: false,
         showSettings: false,
         spotifyAuthenticated: false,
+        song: {},
     });
 
     const authenticateSpotify = () => {
@@ -37,6 +38,25 @@ function Room() {
             });
     };
 
+    const getCurrentSong = () => {
+        fetch("/spotify/current-song", {
+            method: "GET",
+            credentials: "include",
+        })
+            .then((response) => {
+                if (response.status === 204 || !response.ok) return {};
+                return response.json();
+            })
+            .then((data) => {
+                setRoomDetails((prevDetails) => ({
+                    ...prevDetails,
+                    song: data,
+                }));
+
+                console.log("Room Songs:", roomDetails.song);
+            });
+    };
+
     const getRoomDetails = () => {
         fetch(`/api/get-room?code=${roomCode}`)
             .then((response) => {
@@ -56,9 +76,23 @@ function Room() {
             });
     };
 
+    // useEffect(() => {
+    //     getRoomDetails();
+    //     getCurrentSong();
+    //     const interval = setInterval(getCurrentSong, 1000);
+    //     authenticateSpotify();
+    //     return () => clearInterval(interval);
+    // }, []);
+
     useEffect(() => {
         getRoomDetails();
-        // authenticateSpotify();
+        authenticateSpotify();
+    }, [roomCode]);
+
+    useEffect(() => {
+        getCurrentSong();
+        const interval = setInterval(getCurrentSong, 10000);
+        return () => clearInterval(interval);
     }, [roomCode]);
 
     const leaveRoom = () => {
@@ -84,7 +118,7 @@ function Room() {
             />
         );
     }
-
+    console.log("Room details:", roomDetails);
     return (
         <Grid
             container
@@ -101,7 +135,7 @@ function Room() {
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            {/* <Grid item xs={12} align="center">
                 <Typography variant="h6" component="h6">
                     Votes: {roomDetails.votesToSkip}
                 </Typography>
@@ -115,7 +149,31 @@ function Room() {
                 <Typography variant="h6" component="h6">
                     Host: {roomDetails.isHost.toString()}
                 </Typography>
-            </Grid>
+            </Grid> */}
+            {roomDetails.song && Object.keys(roomDetails.song).length > 0 ? (
+                <Grid item xs={12} align="center">
+                    <Typography variant="h5">
+                        {roomDetails.song.title}
+                    </Typography>
+                    <Typography variant="h6">
+                        {roomDetails.song.artists}
+                    </Typography>
+                    <Typography variant="body1">
+                        {roomDetails.song.album}
+                    </Typography>
+                    <img
+                        src={roomDetails.song.image_url}
+                        alt={roomDetails.song.album + " cover"}
+                        style={{ width: "360px", height: "360px" }}
+                    />
+                </Grid>
+            ) : (
+                <Grid item xs={12} align="center">
+                    <Typography variant="h6" component="h6">
+                        No song is currently playing
+                    </Typography>
+                </Grid>
+            )}
             <Grid item xs={12} align="center">
                 {roomDetails.isHost ? (
                     <Grid item xs={12} align="center">

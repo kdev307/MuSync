@@ -6,4 +6,5 @@ urlpatterns = [
     # path('redirect', views.AuthCallback.as_view(), name='redirect'),
     path('redirect', views.spotify_callback, name='redirect'),
     path('is-authenticated', views.IsAuthenticated.as_view(), name='is-authenticated'),
+    path('current-song', views.CurrentSong.as_view(), name='current-song'),
 ]
