@@ -107,7 +107,7 @@ function Room() {
     };
 
     const toggleSettings = (value) => {
-        setRoomDetails({ ...roomDetails, showSettings: value });
+        setRoomDetails((prev) => ({ ...prev, showSettings: value }));
     };
 
     if (roomDetails.showSettings) {
@@ -131,28 +131,28 @@ function Room() {
                 flexDirection: "column",
             }}
         >
-            <Grid xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h4" component="h4">
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            {/* <Grid xs={12} align="center">
+            {/* <Grid size={12} align="center">
                 <Typography variant="h6" component="h6">
                     Votes: {roomDetails.votesToSkip}
                 </Typography>
             </Grid>
-            <Grid xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h6" component="h6">
                     Guest Can Pause: {roomDetails.guestCanPause.toString()}
                 </Typography>
             </Grid>
-            <Grid xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h6" component="h6">
                     Host: {roomDetails.isHost.toString()}
                 </Typography>
             </Grid> */}
             {roomDetails.song && Object.keys(roomDetails.song).length > 0 ? (
-                // <Grid xs={12} align="center">
+                // <Grid size={12} align="center">
                 //     <Typography variant="h5">
                 //         {roomDetails.song.title}
                 //     </Typography>
@@ -170,15 +170,15 @@ function Room() {
                 // </Grid>
                 <MusicPlayer song={roomDetails.song} />
             ) : (
-                <Grid xs={12} align="center">
+                <Grid size={12} align="center">
                     <Typography variant="h6" component="h6">
                         No song is currently playing
                     </Typography>
                 </Grid>
             )}
-            <Grid xs={12} align="center">
+            <Grid size={12} align="center">
                 {roomDetails.isHost ? (
-                    <Grid xs={12} align="center">
+                    <Grid size={12} align="center">
                         <Button
                             variant="contained"
                             color="primary"

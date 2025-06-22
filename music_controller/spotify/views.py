@@ -80,7 +80,7 @@ class CurrentSong(APIView):
         host = room.host
         endpoint = "player/currently-playing"
         response = execute_spotify_api_request(host, endpoint)
-        print(response)
+        # print(response)
         if 'error' in response or 'item' not in response:
             return Response({'message':'Cannot fetch the currently playing song'}, status=status.HTTP_204_NO_CONTENT)
 
@@ -112,3 +112,61 @@ class CurrentSong(APIView):
         }
 
         return Response(song, status=status.HTTP_200_OK)
+
+class PauseSong(APIView):
+    def put(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code).first()
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            result = pause_song(room.host)
+            if 'error' in result:
+                error_info = result['error']
+                if error_info.get('status') == 403 and error_info.get('reason') == 'PREMIUM_REQUIRED':
+                    return Response(
+                        {'message': 'Spotify Premium subscription is required to control playback.'},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+            return Response({'message': 'Song Paused'},status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'You are not allowed to pause the song'}, status=status.HTTP_403_FORBIDDEN)
+class PlaySong(APIView):
+    def put(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            result = play_song(room.host)
+            if 'error' in result:
+                error_info = result['error']
+                if error_info.get('status') == 403 and error_info.get('reason') == 'PREMIUM_REQUIRED':
+                    return Response(
+                        {'message': 'Spotify Premium subscription is required to control playback.'},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+            return Response({'message':'Song Played'},status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': 'You are not allowed to pause the song'}, status=status.HTTP_403_FORBIDDEN)
+
+
+# class PauseSong(APIView):
+#     def put(self, request, format=None):
+#         try:
+#             room_code = request.session.get('room_code')
+#             print("Pause request - session key:", request.session.session_key)
+#             print("Pause request - room_code:", room_code)
+
+#             if not room_code:
+#                 return Response({'error': 'Room code not in session'}, status=400)
+
+#             room = Room.objects.filter(code=room_code).first()
+#             if not room:
+#                 return Response({'error': 'Room not found'}, status=404)
+
+#             if request.session.session_key == room.host or room.guest_can_pause:
+#                 print("Pausing song for host:", room.host)
+#                 result = pause_song(room.host)
+#                 print("pause_song result:", result)
+#                 return Response(status=status.HTTP_204_NO_CONTENT)
+#             else:
+#                 return Response({'message': 'You are not allowed to pause the song'}, status=status.HTTP_403_FORBIDDEN)
+#         except Exception as e:
+#             print("🔥 Exception in PauseSong:", str(e))
+#             return Response({'error': str(e)}, status=500)
+
