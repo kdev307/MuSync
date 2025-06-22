@@ -9,7 +9,7 @@ import {
     Alert,
 } from "@mui/material";
 
-import { PlayArrow, Pause, SkipNext, SkipPrevious } from "@mui/icons-material";
+import { PlayArrow, Pause, SkipNext } from "@mui/icons-material";
 
 function MusicPlayer({ song }) {
     const [error, setError] = useState("");
@@ -54,6 +54,25 @@ function MusicPlayer({ song }) {
                 handleError("Failed to connect to Spotify.");
             });
     };
+
+    const skipSong = () => {
+        fetch("/spotify/skip", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    handleError(
+                        "Spotify Premium is required to access the song player."
+                    );
+                }
+            })
+            .catch(() => {
+                handleError("Failed to connect to Spotify.");
+            });
+    };
+
     const songProgress = (song.time / song.duration) * 100;
     return (
         <>
@@ -82,17 +101,16 @@ function MusicPlayer({ song }) {
                             {song.album}
                         </Typography>
                         <div>
-                            <IconButton>
+                            {/* <IconButton>
                                 <SkipPrevious />
-                            </IconButton>
+                            </IconButton> */}
                             <IconButton
-                                onClick={() => {
-                                    song.is_playing ? pauseSong() : playSong();
-                                }}
+                                onClick={song.is_playing ? pauseSong : playSong}
                             >
                                 {song.is_playing ? <Pause /> : <PlayArrow />}
                             </IconButton>
-                            <IconButton>
+                            <IconButton onClick={skipSong}>
+                                {song.votes} / {song.votes_required}
                                 <SkipNext />
                             </IconButton>
                         </div>
