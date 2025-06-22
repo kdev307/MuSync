@@ -22,12 +22,12 @@ function Home() {
 
     return (
         <Grid container spacing={3}>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h3" component="h3">
                     HouseParty
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <ButtonGroup variant="contained" color="primary">
                     <Button color="primary" to="/join-room" component={Link}>
                         Join a Room

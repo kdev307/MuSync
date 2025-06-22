@@ -29,12 +29,12 @@ function RoomJoin() {
     };
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography variant="h4" component="h4">
                     Join a Room
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <TextField
                     error={error}
                     label="Code"
@@ -46,7 +46,7 @@ function RoomJoin() {
                 />
             </Grid>
 
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Button
                     variant="contained"
                     color="primary"
@@ -55,7 +55,7 @@ function RoomJoin() {
                     Enter Room
                 </Button>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Button
                     variant="contained"
                     color="secondary"

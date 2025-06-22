@@ -40,17 +40,15 @@ function CreateRoom() {
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography component="h4" variant="h4">
                     Create a Room
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <FormControl component="fieldset">
-                    <FormHelperText>
-                        <div align="center">
-                            Guest Control of Playback State
-                        </div>
+                    <FormHelperText align="center">
+                        Guest Control of Playback State
                     </FormHelperText>
                     <RadioGroup
                         row
@@ -76,7 +74,7 @@ function CreateRoom() {
                         />
                     </RadioGroup>
                 </FormControl>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <FormControl>
                         <TextField
                             required
@@ -93,14 +91,12 @@ function CreateRoom() {
                                 })
                             }
                         />
-                        <FormHelperText>
-                            <div align="center">
-                                Votes required to skip songs
-                            </div>
+                        <FormHelperText align="center">
+                            Votes required to skip songs
                         </FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <Button
                         color="primary"
                         variant="contained"
@@ -109,7 +105,7 @@ function CreateRoom() {
                         Create A Room
                     </Button>
                 </Grid>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <Button
                         color="secondary"
                         variant="contained"

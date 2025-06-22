@@ -71,14 +71,14 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
 
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Typography component="h4" variant="h4">
                     Edit Room : {roomCode}
                 </Typography>
             </Grid>
 
             {/* Success/Error Message Collapse */}
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <Collapse in={collapseOpen}>
                     <Alert
                         severity={alertSeverity}
@@ -89,12 +89,10 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
                 </Collapse>
             </Grid>
 
-            <Grid item xs={12} align="center">
+            <Grid size={12} align="center">
                 <FormControl component="fieldset">
-                    <FormHelperText>
-                        <div align="center">
-                            Guest Control of Playback State
-                        </div>
+                    <FormHelperText align="center">
+                        Guest Control of Playback State
                     </FormHelperText>
                     <RadioGroup
                         row
@@ -121,7 +119,7 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
                     </RadioGroup>
                 </FormControl>
 
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <FormControl>
                         <TextField
                             required
@@ -138,14 +136,12 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
                                 })
                             }
                         />
-                        <FormHelperText>
-                            <div align="center">
-                                Votes required to skip songs
-                            </div>
+                        <FormHelperText align="center">
+                            Votes required to skip songs
                         </FormHelperText>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <Button
                         color="primary"
                         variant="contained"
@@ -154,7 +150,7 @@ function EditRoom({ roomDetails, toggleSettings, updateRoomData }) {
                         Update Room
                     </Button>
                 </Grid>
-                <Grid item xs={12} align="center">
+                <Grid size={12} align="center">
                     <Button
                         color="secondary"
                         variant="contained"

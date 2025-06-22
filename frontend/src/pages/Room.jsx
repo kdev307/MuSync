@@ -131,28 +131,28 @@ function Room() {
                 flexDirection: "column",
             }}
         >
-            <Grid item xs={12} align="center">
+            <Grid xs={12} align="center">
                 <Typography variant="h4" component="h4">
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            {/* <Grid item xs={12} align="center">
+            {/* <Grid xs={12} align="center">
                 <Typography variant="h6" component="h6">
                     Votes: {roomDetails.votesToSkip}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid xs={12} align="center">
                 <Typography variant="h6" component="h6">
                     Guest Can Pause: {roomDetails.guestCanPause.toString()}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
+            <Grid xs={12} align="center">
                 <Typography variant="h6" component="h6">
                     Host: {roomDetails.isHost.toString()}
                 </Typography>
             </Grid> */}
             {roomDetails.song && Object.keys(roomDetails.song).length > 0 ? (
-                // <Grid item xs={12} align="center">
+                // <Grid xs={12} align="center">
                 //     <Typography variant="h5">
                 //         {roomDetails.song.title}
                 //     </Typography>
@@ -170,15 +170,15 @@ function Room() {
                 // </Grid>
                 <MusicPlayer song={roomDetails.song} />
             ) : (
-                <Grid item xs={12} align="center">
+                <Grid xs={12} align="center">
                     <Typography variant="h6" component="h6">
                         No song is currently playing
                     </Typography>
                 </Grid>
             )}
-            <Grid item xs={12} align="center">
+            <Grid xs={12} align="center">
                 {roomDetails.isHost ? (
-                    <Grid item xs={12} align="center">
+                    <Grid xs={12} align="center">
                         <Button
                             variant="contained"
                             color="primary"
