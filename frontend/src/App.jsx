@@ -4,6 +4,7 @@ import CreateRoom from "./pages/CreateRoom";
 import Home from "./pages/Home";
 import RoomJoin from "./pages/RoomJoin";
 import Room from "./pages/Room";
+import Info from "./pages/Info";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                     <Route path="/join-room" element={<RoomJoin />} />
 
                     <Route path="/create-room" element={<CreateRoom />} />
+                    <Route path="/info" element={<Info />} />
                     <Route path="/room/:roomCode" element={<Room />} />
                 </Routes>
             </BrowserRouter>
