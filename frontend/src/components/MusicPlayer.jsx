@@ -14,7 +14,7 @@ function MusicPlayer({ song, isPlaying }) {
     return (
         <Card>
             <Grid container alignItems="center">
-                <Grid item xs={4} align="center">
+                <Grid size={4} align="center">
                     <img
                         src={song.image_url}
                         alt={song.album + " cover"}
@@ -22,7 +22,7 @@ function MusicPlayer({ song, isPlaying }) {
                         width="100%"
                     />
                 </Grid>
-                <Grid item xs={8} align="center">
+                <Grid size={8} align="center">
                     <Typography component="h5" variant="h5">
                         {song.title}
                     </Typography>
