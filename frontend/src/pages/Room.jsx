@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Typography, Button } from "@mui/material";
 import EditRoom from "./EditRoom";
+import MusicPlayer from "../components/MusicPlayer";
 
 function Room() {
     const { roomCode } = useParams();
@@ -91,7 +92,7 @@ function Room() {
 
     useEffect(() => {
         getCurrentSong();
-        const interval = setInterval(getCurrentSong, 10000);
+        const interval = setInterval(getCurrentSong, 1000);
         return () => clearInterval(interval);
     }, [roomCode]);
 
@@ -151,22 +152,23 @@ function Room() {
                 </Typography>
             </Grid> */}
             {roomDetails.song && Object.keys(roomDetails.song).length > 0 ? (
-                <Grid item xs={12} align="center">
-                    <Typography variant="h5">
-                        {roomDetails.song.title}
-                    </Typography>
-                    <Typography variant="h6">
-                        {roomDetails.song.artists}
-                    </Typography>
-                    <Typography variant="body1">
-                        {roomDetails.song.album}
-                    </Typography>
-                    <img
-                        src={roomDetails.song.image_url}
-                        alt={roomDetails.song.album + " cover"}
-                        style={{ width: "360px", height: "360px" }}
-                    />
-                </Grid>
+                // <Grid item xs={12} align="center">
+                //     <Typography variant="h5">
+                //         {roomDetails.song.title}
+                //     </Typography>
+                //     <Typography variant="h6">
+                //         {roomDetails.song.artists}
+                //     </Typography>
+                //     <Typography variant="body1">
+                //         {roomDetails.song.album}
+                //     </Typography>
+                //     <img
+                //         src={roomDetails.song.image_url}
+                //         alt={roomDetails.song.album + " cover"}
+                //         style={{ width: "360px", height: "360px" }}
+                //     />
+                // </Grid>
+                <MusicPlayer song={roomDetails.song} />
             ) : (
                 <Grid item xs={12} align="center">
                     <Typography variant="h6" component="h6">
